@@ -1,1 +1,1 @@
-    print("result is ",result)
+i+=1
