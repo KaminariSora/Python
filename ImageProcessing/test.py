@@ -1,27 +1,34 @@
-# import os
-# import tensorflow as tf
-
-
-print("TF version:", tf.__version__)
-print("GPU Available:", tf.config.list_physical_devices('GPU'))
-print("GPU Device:", tf.test.gpu_device_name())
-
-# print(tf.__version__)
-
-# print('1: ', tf.config.list_physical_devices('GPU'))
-# print('2: ', tf.test.is_built_with_cuda)
-# print('3: ', tf.test.gpu_device_name())
-# print('4: ', tf.config.get_visible_devices())
-
-# cuda_path = r"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin"
-
-# files_to_check = ["cudart64_110.dll", "cudnn64_8.dll"]
-
-# for f in files_to_check:
-#     full_path = os.path.join(cuda_path, f)
-#     print(f"{f}: {'✅ Found' if os.path.exists(full_path) else '❌ Not Found'}")
-
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import tensorflow as tf
-print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+import pandas as pd
+import numpy as np
+import os
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
+
+# ---------------------------
+# STEP 1: Load CSV + Set Path
+# ---------------------------
+df = pd.read_csv('acne_dataset/labels.csv')
+image_dir = 'acne_dataset/images'
+
+# ---------------------------
+# STEP 2: Custom data loader
+# ---------------------------
+img_height, img_width = 224, 224  # ขนาดภาพที่ model ต้องการ
+
+def load_image_and_labels(filename, label):
+    image_path = tf.strings.join([image_dir, filename], separator=os.sep)
+    image = tf.io.read_file(image_path)
+    image = tf.image.decode_jpeg(image, channels=3)
+    image = tf.image.resize(image, [img_height, img_width])
+    image = image / 255.0  # normalize
+
+    return image, label
+
+# Convert filenames and labels
+filenames = df['filename'].values
+labels = df[['blackhead', 'inflammatory', 'pustule']].values.astype(np.float32)
+
+# Convert to TensorFlow dataset
+dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
+dataset = dataset.map(load_image_and_labels)
+dataset = dataset.shuffle(buffer_size=100).batch(32).prefetch(tf.data.AUTOTUNE)
