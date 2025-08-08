@@ -43,6 +43,7 @@ if current_line:
 # วนแต่ละบรรทัด
 # ต่อคำแต่ละคำต่อกัน
 # ถ้าระยะห่าง (space) ระหว่างคำปัจจุบันกับคำถัดไป มากกว่า 0.6 → ถือว่าเป็นช่องว่าง → ใส่ _
+output_lines = []
 for line in lines:
     line_text = ""
     for i, word in enumerate(line):
@@ -55,5 +56,12 @@ for line in lines:
             
             if space > 0.6:
                 line_text += "_"
+    output_lines.append(line_text)
     print(line_text)
 
+with open("Data/output_1.txt", "w", encoding="utf-8") as out_file:
+    for line in output_lines:
+        out_file.write(line + "\n")
+
+        
+print("✅ บันทึกไฟล์เรียบร้อย: Data/meeting_executive2_66_output.txt")
