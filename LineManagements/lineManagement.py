@@ -3,7 +3,7 @@ from pythainlp.tag import pos_tag
 from pythainlp.tokenize import word_tokenize
 
 # โหลดไฟล์ JSON
-with open("Data/meeting_executive1_66.pdf.json", "r", encoding="utf-8") as f:
+with open("Data/meeting_executive21_66.pdf.json", "r", encoding="utf-8") as f:
     json_data = json.load(f)
 
 output_lines = []
@@ -83,8 +83,8 @@ for page_idx, page in enumerate(json_data["analyzeResult"]["pages"]):
 print(f"\nจำนวนคำทั้งหมดก่อนคัดกรอง: {total_words}")
 print(f"จำนวนคำทั้งหมดหลังคัดกรอง: {total_words_filtered}")
 
-with open("Data/output_1_test.txt", "w", encoding="utf-8") as out_file:
+with open("Data/output_21.txt", "w", encoding="utf-8") as out_file:
     for line in output_lines:
         out_file.write(line + "\n")
 
-print("✅ บันทึกไฟล์เรียบร้อย: Data/output_1_test.txt")
+print("✅ บันทึกไฟล์เรียบร้อย: Data/output_21.txt")

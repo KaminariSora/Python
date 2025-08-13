@@ -5,10 +5,10 @@ import matplotlib.font_manager as fm
 
 thai_font = fm.FontProperties(fname="C:/Windows/Fonts/tahoma.ttf")
 
-with open("Data/meeting_executive1_66.pdf.json", "r", encoding="utf-8") as f:
+with open("LineManagements/Data/meeting_executive1_66.pdf.json", "r", encoding="utf-8") as f:
     json_data = json.load(f)
 
-words = json_data["analyzeResult"]["pages"][0]["words"]
+words = json_data["analyzeResult"]["pages"][25]["words"]
 
 fig, ax = plt.subplots(figsize=(8, 11))
 
