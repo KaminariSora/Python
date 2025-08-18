@@ -8,7 +8,7 @@ thai_font = fm.FontProperties(fname="C:/Windows/Fonts/tahoma.ttf")
 with open("LineManagements/Data/meeting_executive4_66.pdf.json", "r", encoding="utf-8") as f:
     json_data = json.load(f)
 
-page_to_plot = 31
+page_to_plot = 28
 
 fig, ax = plt.subplots(figsize=(8, 11))
 
