@@ -1,30 +1,34 @@
-import requests
-import json
+from fastapi import FastAPI
+from pydantic import BaseModel
+import uvicorn
 
-url = "http://localhost:8080/api/v1/user/create" 
+app = FastAPI()
 
-# ข้อมูล input
-data = {
-    "name": "testing",
-    "email": "strinsdasd124334tawrgg@gmail.com"
-}
+# 1. สร้างโครงสร้างข้อมูลให้ตรงกับ Payload ใน Swagger (name, email)
+class UserPayload(BaseModel):
+    name: str
+    email: str
 
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3YTY5ZWRlMC05M2YwLTQ1OWEtODJmNC03MGY1ZjMzYTNhNTMifQ.ZMAqIA0I54SnJwq3dr5k_fS7l58y9Wlx9ZKMpCqnPvk"
-}
+# 2. สร้าง Endpoint ให้ตรงกับ Path ใน Java Swagger
+@app.post("/api/v1/user/create")
+async def create_user(data: UserPayload):
+    # ข้อมูลที่ Java ส่งมาจะมาอยู่ในตัวแปร data
+    print(f"--- AI Agent Received Data ---")
+    print(f"Name: {data.name}")
+    print(f"Email: {data.email}")
+    
+    # ตรงนี้คือจุดที่คุณจะเอา data.name ไปให้ AI Agent ทำงานต่อ
+    
+    # 3. ตอบกลับให้ตรงตาม Format ที่ Swagger กำหนด (Response 200)
+    return {
+        "code": "200",
+        "message": "Success",
+        "data": {
+            "userId": "AI-999",
+            "token": "AI-AGENT-TOKEN-001"
+        }
+    }
 
-try:
-    response = requests.post(url, data=json.dumps(data), headers=headers)
-
-    if response.status_code == 200 or response.status_code == 201:
-        print("Response:", response.json())
-    else:
-        print(response.status_code)
-        print("Detail:", response.text)
-
-except Exception as e:
-    print(e)
-
-# Key เริ่ม = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3YTY5ZWRlMC05M2YwLTQ1OWEtODJmNC03MGY1ZjMzYTNhNTMifQ.ZMAqIA0I54SnJwq3dr5k_fS7l58y9Wlx9ZKMpCqnPvk
-# Key หลัง = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMmQ1YmVmNi1kYWZjLTQ5NzUtYmIyMy1jMWQ3ODY0YzYwNWMiLCJpYXQiOjE3NzcxMzI0MTIsImV4cCI6MTc3NzIxODgxMn0._0iexZb5yyD3I3qHdhvV9Byvp3MUL40GH8GVvx_o7Bo
+if __name__ == "__main__":
+    # รันบน localhost พอร์ต 8080
+    uvicorn.run(app, port=8081)
