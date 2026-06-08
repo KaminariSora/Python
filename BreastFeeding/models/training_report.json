@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-06-08T15:16:28.461061",
+  "config": {
+    "data_dir": "data",
+    "model_dir": "models",
+    "image_size": [
+      640,
+      480
+    ],
+    "test_size": 0.2,
+    "random_state": 42,
+    "min_detection_confidence": 0.5,
+    "min_tracking_confidence": 0.5,
+    "n_estimators": 200,
+    "cv_folds": 5,
+    "augment_data": true,
+    "augment_count": 3
+  },
+  "dataset": {
+    "total_samples": 17,
+    "train_samples": 13,
+    "test_samples": 4,
+    "feature_dim": 84,
+    "class_distribution": {
+      "correct": 
